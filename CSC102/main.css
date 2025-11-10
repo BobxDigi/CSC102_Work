@@ -1,0 +1,40 @@
+/*
+declaration blocks:
+
+selcector{
+    property: value;
+    property2: value;
+}
+*/
+
+body {
+    background-color: rgb(20, 127, 162);
+    color: rgb(255, 255, 255);
+}
+
+nav{
+    height: 600px;
+    width: 200px;
+    float: left;
+    padding: 5px;
+    line-height: 30px;
+}
+
+footer{}
+  text-align: center;
+  margin-right: 200px;
+}
+
+#sci.jpg{
+    width: 100px;
+    height: 100px;
+
+#gf.jpg{
+    width: 100px;
+    height: 100px;
+
+h1{
+    text-align: center;
+}
+}
+}
