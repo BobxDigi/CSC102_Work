@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<!-- 
+    strings.html
+    Student: J. Johnson II
+    Description: Security Gate SG1 - validates user name and ZIP code
+                 before revealing a secret message.
+-->
+<html lang="en">
+<head>
+    <!-- Set the character encoding for proper text rendering -->
+    <meta charset="UTF-8">
+    <!-- Title displayed in the browser tab -->
+    <title>Security Gate SG1 - Secret Message Access</title>
+
+    <!-- Internal CSS for creative styling and improved user experience -->
+    <style>
+        /* Apply base styling to the entire page */
+        body {
+            /* Dark sci-fi gradient background for visual interest */
+            background: radial-gradient(circle at top, #1e293b, #020617);
+            /* Use a modern system font stack */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            /* Remove default margin from the page */
+            margin: 0;
+            /* Light text color for contrast against dark background */
+            color: #e5e7eb;
+            /* Center content horizontally and vertically using flexbox */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Ensure body fills full height of the viewport */
+            min-height: 100vh;
+        }
+
+        /* Main card container that holds the form and messages */
+        .card {
+            /* Dark background for card body */
+            background-color: #020617;
+            /* Rounded corners for a modern look */
+            border-radius: 16px;
+            /* Subtle border to separate card from background */
+            border: 1px solid #4b5563;
+            /* Inner spacing for card content */
+            padding: 24px;
+            /* Limit width for better readability */
+            max-width: 500px;
+            width: 92%;
+            /* Drop shadow to add depth to the card */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Styling for the top heading text */
+        h1 {
+            /* Center the heading text */
+            text-align: center;
+            /* Accent color for heading */
+            color: #38bdf8;
+            /* Remove default top margin */
+            margin-top: 0;
+            /* Small bottom margin for spacing */
+            margin-bottom: 6px;
+            /* Slight letter spacing for a futuristic feel */
+            letter-spacing: 0.08em;
+        }
+
+        /* Subtitle text that describes the purpose of the page */
+        .subtitle {
+            /* Center the subtitle text */
+            text-align: center;
+            /* Slightly smaller font size than heading */
+            font-size: 0.95rem;
+            /* Muted text color for secondary information */
+            color: #cbd5f5;
+            /* Spacing below the subtitle to separate it from the form */
+            margin-bottom: 18px;
+        }
+
+        /* Styling for the lock image at the top of the card */
+        .lock-image {
+            /* Display as block so margin auto can center it */
+            display: block;
+            /* Center the image horizontally and add bottom spacing */
+            margin: 0 auto 12px auto;
+            /* Set a fixed size for the icon */
+            width: 72px;
+            height: 72px;
+        }
+
+        /* Styling for the form that contains all user inputs */
+        form {
+            /* Use flexbox to arrange elements vertically */
+            display: flex;
+            flex-direction: column;
+            /* Space between each input group */
+            gap: 10px;
+            /* Bottom margin to separate form from message area */
+            margin-bottom: 16px;
+        }
+
+        /* Styling for text labels above inputs */
+        label {
+            /* Slightly larger font for readability */
+            font-size: 0.95rem;
+            /* Make label text bold to stand out */
+            font-weight: 600;
+        }
+
+        /* Container for first and last name inputs so they can be aligned */
+        .name-row {
+            /* Use flexbox to put name inputs on the same row (when space allows) */
+            display: flex;
+            /* Space between the first and last name sections */
+            gap: 8px;
+        }
+
+        /* Styling for all text input boxes */
+        input[type="text"] {
+            /* Dark background to match the card style */
+            background-color: #020617;
+            /* Rounded corners for inputs */
+            border-radius: 10px;
+            /* Subtle border to visually define the field */
+            border: 1px solid #4b5563;
+            /* Inner padding for comfortable typing space */
+            padding: 8px;
+            /* Light text color for contrast against dark background */
+            color: #e5e7eb;
+            /* Make input fields expand to fill available width */
+            width: 100%;
+        }
+
+        /* Styling for the submit button */
+        button[type="submit"] {
+            /* Top margin to separate button from input fields */
+            margin-top: 8px;
+            /* Padding for a larger click area */
+            padding: 10px;
+            /* Pill-shaped button corners */
+            border-radius: 999px;
+            /* Remove default border styling */
+            border: none;
+            /* Show pointer cursor to indicate the button is clickable */
+            cursor: pointer;
+            /* Green gradient background for a strong "go" signal */
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            /* Dark text color for contrast on bright button background */
+            color: #052e16;
+            /* Bold and clear button text */
+            font-weight: 700;
+            /* Slightly larger font size for emphasis */
+            font-size: 1rem;
+            /* Smooth transitions for hover/active effects */
+            transition: transform 0.08s ease, box-shadow 0.08s ease;
+        }
+
+        /* Hover state styling for the submit button */
+        button[type="submit"]:hover {
+            /* Add a glowing shadow when the user hovers over the button */
+            box-shadow: 0 8px 16px rgba(34, 197, 94, 0.5);
+            /* Raise the button slightly for a 3D effect */
+            transform: translateY(-1px);
+        }
+
+        /* Active (pressed) state for the submit button */
+        button[type="submit"]:active {
+            /* Slightly shrink and lower the button to simulate a click */
+            transform: translateY(1px) scale(0.98);
+            /* Remove the hover shadow effect */
+            box-shadow: none;
+        }
+
+        /* Area where validation and secret messages will be displayed */
+        #messageArea {
+            /* Match card background color for consistency */
+            background-color: #020617;
+            /* Rounded corners to match design language */
+            border-radius: 12px;
+            /* Border to visually separate the message area */
+            border: 1px solid #4b5563;
+            /* Padding inside the message area for readability */
+            padding: 12px;
+            /* Minimum height so the area is visible even before messages */
+            min-height: 72px;
+            /* Slightly smaller font size for informational text */
+            font-size: 0.95rem;
+        }
+
+        /* CSS class used for error / validation messages */
+        .error {
+            /* Use a red color to indicate problems */
+            color: #fb7185;
+            /* Bold text so the error stands out */
+            font-weight: bold;
+        }
+
+        /* CSS class used for success / secret message text */
+        .success {
+            /* Use green color to indicate success */
+            color: #4ade80;
+            /* Bold text for emphasis */
+            font-weight: bold;
+        }
+    </style>
+
+    <!-- External JavaScript file holding validation logic and secret message behavior -->
+    <!-- The defer attribute makes sure the script runs after the HTML is parsed -->
+    <script src="strings.js" defer></script>
+</head>
+<body>
+    <!-- Main card container for the Security Gate SG1 interface -->
+    <div class="card">
+        <!-- Lock icon image for creative element and security theme -->
+        <img class="lock-image" src="https://img.icons8.com/ios-filled/100/38bdf8/lock--v1.png" alt="Lock icon">
+
+        <!-- Main heading for the page -->
+        <h1>Security Gate SG1</h1>
+
+        <!-- Subtitle to give the user context about what to do -->
+        <p class="subtitle">
+            Provide your credentials to attempt access to the hidden SG1 secret message.
+        </p>
+
+        <!-- 
+            Single form that contains all user input fields and the submit button.
+            Note: No JavaScript functions are called directly in this HTML.
+            JavaScript connects to this form using its id from strings.js.
+        -->
+        <form id="securityForm">
+            <!-- Row container that holds first and last name inputs -->
+            <div class="name-row">
+                <!-- Label for the first name input -->
+                <label for="firstName">First Name</label>
+                <!-- Text input where user types their first name -->
+                <input type="text" id="firstName" name="firstName" placeholder="First name">
+
+                <!-- Label for the last name input -->
+                <label for="lastName">Last Name</label>
+                <!-- Text input where user types their last name -->
+                <input type="text" id="lastName" name="lastName" placeholder="Last name">
+            </div>
+
+            <!-- Label for the ZIP code input -->
+            <label for="zipCode">ZIP Code</label>
+            <!-- Text input where user types their 5-digit ZIP code -->
+            <input type="text" id="zipCode" name="zipCode" placeholder="5-digit ZIP code">
+
+            <!-- Submit button that user clicks to validate and attempt access -->
+            <button type="submit">Access SG1</button>
+        </form>
+
+        <!-- Div where validation errors or the secret message will be shown -->
+        <div id="messageArea">
+            <!-- Initial helper text displayed before the user submits the form -->
+            Awaiting credential entry for Security Gate SG1...
+        </div>
+    </div>
+</body>
+</html>
