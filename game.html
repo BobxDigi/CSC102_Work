@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!-- Declare HTML5 document type so the browser uses standards mode -->
+<html lang="en">
+<head>
+    <!-- Character encoding for proper rendering of text -->
+    <meta charset="UTF-8">
+    <!-- Title that appears in the browser tab -->
+    <title>Johnson's Gambit - 3 Hand Monty</title>
+
+    <!-- Internal CSS for a gold & black casino theme -->
+    <style>
+        /* Base styles for the whole page */
+        body {
+            /* Gold glow on a dark background for a luxury casino feel */
+            background: radial-gradient(circle at top, #facc15 0, #020617 40%, #000000 100%);
+            /* Light text color for good contrast on dark background */
+            color: #f9fafb;
+            /* Clean, modern font stack */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            /* Remove default margins */
+            margin: 0;
+            /* Full viewport height layout */
+            min-height: 100vh;
+            /* Center the main card using flexbox */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Card container that holds the whole game UI */
+        .casino-card {
+            /* Very dark background for the card itself */
+            background-color: #020617;
+            /* Rounded corners */
+            border-radius: 18px;
+            /* Gold border for premium look */
+            border: 1px solid #facc15;
+            /* Padding inside the card */
+            padding: 24px;
+            /* Limit width for readability */
+            max-width: 520px;
+            width: 92%;
+            /* Strong drop shadow for depth */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Main heading at the top of the card */
+        h1 {
+            /* Center the title text */
+            text-align: center;
+            /* Bright gold color */
+            color: #facc15;
+            /* Tighten top and bottom spacing */
+            margin-top: 0;
+            margin-bottom: 6px;
+            /* Slight letter spacing for style */
+            letter-spacing: 0.06em;
+        }
+
+        /* Subtitle that explains the game briefly */
+        .subtitle {
+            text-align: center;
+            font-size: 0.95rem;
+            color: #e5e7eb;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for the form that gathers user input */
+        form {
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            gap: 12px;             /* Space between input groups */
+            margin-bottom: 18px;
+        }
+
+        /* Labels for inputs */
+        label {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        /* Row container for the three hand choices */
+        .hand-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* Each hand option (left / middle / right) */
+        .hand-option {
+            background: linear-gradient(145deg, #111827, #020617);
+            border-radius: 12px;
+            padding: 8px 10px;
+            border: 1px solid #4b5563;
+            flex: 1; /* Make all three options equal width */
+            cursor: pointer;
+        }
+
+        /* Style for the radio input itself to give a bit more spacing */
+        .hand-option input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        /* Number input for the wager field */
+        input[type="number"] {
+            background-color: #020617;
+            border-radius: 10px;
+            border: 1px solid #4b5563;
+            padding: 8px;
+            color: #f9fafb;
+        }
+
+        /* Submit button styling */
+        button[type="submit"] {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 999px; /* pill-shaped button */
+            border: none;
+            cursor: pointer;
+            /* Gold gradient for primary action button */
+            background: linear-gradient(90deg, #facc15, #eab308);
+            color: #1f2933;
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+        }
+
+        /* Hover effect for the button */
+        button[type="submit"]:hover {
+            box-shadow: 0 10px 20px rgba(250, 204, 21, 0.45);
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+        }
+
+        /* Active/pressed state for the button */
+        button[type="submit"]:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: none;
+        }
+
+        /* Area where game results and messages appear */
+        #resultArea {
+            background-color: #020617;
+            border-radius: 12px;
+            border: 1px solid #4b5563;
+            padding: 14px;
+            min-height: 80px;
+            font-size: 0.95rem;
+        }
+
+        /* Area where running statistics are displayed */
+        #statsArea {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #a5b4fc;
+        }
+
+        /* Class for validation / error messages */
+        .error {
+            color: #f97373;
+            font-weight: bold;
+        }
+
+        /* Class for winning result text */
+        .win {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        /* Class for losing result text */
+        .lose {
+            color: #fb923c;
+            font-weight: bold;
+        }
+    </style>
+
+    <!-- External JavaScript file that holds all game logic -->
+    <!-- 'defer' ensures the script runs after the HTML has been parsed -->
+    <script src="code.js" defer></script>
+</head>
+<body>
+    <!-- Main card container for Johnson's Gambit UI -->
+    <div class="casino-card">
+        <!-- Game title text -->
+        <h1>Johnson's Gambit</h1>
+
+        <!-- Short description explaining 3 Hand Monty -->
+        <p class="subtitle">
+            3 Hand Monty: the latinum sits beneath one hand. Trust your instincts, pick a hand, and see if the odds favor you.
+        </p>
+
+        <!--
+            Form that collects all user input.
+            NOTE: No JavaScript functions appear in this HTML.
+            The submit event is wired up inside code.js by assigning form.onsubmit.
+        -->
+        <form id="montyForm">
+            <!-- Label introducing the hand choice group -->
+            <label for="handChoice">
+                Choose a hand to reveal the latinum:
+            </label>
+
+            <!-- Flex row with three hand options -->
+            <div class="hand-row" id="handChoice">
+                <!-- Left hand option with radio input -->
+                <label class="hand-option">
+                    <input type="radio" name="hand" value="1">
+                    Left Hand 🖐
+                </label>
+
+                <!-- Middle hand option with radio input -->
+                <label class="hand-option">
+                    <input type="radio" name="hand" value="2">
+                    Middle Hand ✋
+                </label>
+
+                <!-- Right hand option with radio input -->
+                <label class="hand-option">
+                    <input type="radio" name="hand" value="3">
+                    Right Hand 🤚
+                </label>
+            </div>
+
+            <!-- Label describing the optional wager input -->
+            <label for="wagerAmount">
+                Optional wager (gold-pressed latinum bars):
+            </label>
+
+            <!-- Numeric input for the wager value (0 or more) -->
+            <input
+                type="number"
+                id="wagerAmount"
+                name="wagerAmount"
+                min="0"
+                step="1"
+                placeholder="0 for no wager"
+            >
+
+            <!-- Submit button that starts a round of the game -->
+            <button type="submit">
+                Reveal the Latium
+            </button>
+        </form>
+
+        <!-- Div where game messages and results are written via innerHTML -->
+        <div id="resultArea">
+            Welcome to <strong>Johnson's Gambit</strong>. Select a hand and (optionally) place a wager,
+            then press <strong>Reveal the Latium</strong> to play 3 Hand Monty.
+        </div>
+
+        <!-- Div where running statistics are shown using innerHTML -->
+        <div id="statsArea">
+            <!-- Content initialized and updated from code.js -->
+        </div>
+    </div>
+</body>
+</html>
